@@ -38,6 +38,11 @@ API Documentation
 
 See documentation.md
 
+Examples
+--------
+
+See `example` folder.
+
 Requirements
 ------------
 
