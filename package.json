@@ -1,0 +1,21 @@
+{
+  "name": "railgun-js",
+  "version": "0.0.1",
+  "description": "Stupidly simple microservice architecture framework",
+  "scripts": {
+    "test": "mocha -R spec"
+  },
+  "author": "Adam Brady <adam@boxxen.org>",
+  "license": "BSD",
+  "devDependencies": {
+    "supertest": "^0.13.0"
+  },
+  "dependencies": {
+    "hapi": "^6.0.2",
+    "uuid": "^1.4.1",
+    "node-etcd": "^2.1.1",
+    "slug": "^0.5.0",
+    "joi": "^4.6.1",
+    "superagent": "^0.18.0"
+  }
+}
