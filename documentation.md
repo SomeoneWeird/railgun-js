@@ -79,8 +79,20 @@ var client = new Client({
   port: 4001
 });
 ```
-### client(serviceName, eventName, data, callback)
-The constructor function returns this function. This function polls `etcd` for hosts running `serviceName`, then randomly selects one from that list, and calls `eventName` with `data`. Finally, `callback` is called with `(err, response)`. Because it polls etcd for the hosts available, you don't need to manually keep track of hosts that are running particular services, this allows for massive horizontal scaling.
+### client(service, eventName, data, callback)
+The constructor function returns this function. This function polls `etcd` for hosts running `service`, then randomly selects one from that list, and calls `eventName` with `data`. Finally, `callback` is called with `(err, response)`. Because it polls etcd for the hosts available, you don't need to manually keep track of hosts that are running particular services, this allows for massive horizontal scaling.
+
+`service` can also be an object containing `service` and `filter`. Filters have access to the following variables:
+
+* mem_total
+* mem_free
+* cpus_num
+* cpus_n - (where n is one cpu, value is clock speed in MHz)
+* loadavg_0
+* loadavg_1
+* loadavg_2
+
+Filters will only allow use of a service if the filter express returns `true`. This is useful if you know that you need at least 300mb free ram etc. Uses [https://github.com/joewalnes/filtrex](filtrex) syntax.
 
 #### Example
 ```js
@@ -90,7 +102,15 @@ client('example_service', 'example_event', {}, function(err, response) {
 });
 ```
 
-### .findServices(serviceName, callback)
+#### Example w/ filter
+```js
+client({ service: 'example_service', filter: 'mem_free > 300' }, 'example_event', {}, function(err, response) {
+    // if you  have the example service running above (and your PC has more than 300mb ram :))
+    console.log(response); // -> "hello world"
+});
+```
+
+### .findServices(serviceName[, filter], callback)
 `findServices` is also used internally when making an event call, but it could be useful to figure out how many other hosts are running particular services. `callback` will be called with an array, which will contain an object (```{ host:, port: }```) for each host running that particular service.
 
 #### Example
