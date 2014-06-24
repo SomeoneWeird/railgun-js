@@ -67,6 +67,33 @@ describe('Client', function() {
 
   });
 
+  it('should fail to find service with no memory', function(done) {
+
+    client.findServices('test_service', "mem_total == 0", function(err, services) {
+
+      assert.ifError(err);
+
+      assert.equal(services.length, 0);
+      done();
+
+    });
+
+  });
+
+  it('should find service using large filter', function(done) {
+
+    client.findServices('test_service', "(mem_total > 100 and mem_free > 100) and (loadavg_0 < 100 and cpus_num > 0 and cpus_0 > 100)",
+      function(err, services) {
+
+        assert.ifError(err);
+
+        assert.equal(services.length, 1);
+        done();
+
+      });
+    
+  });
+
   it('should be able to query a running service', function(done) {
 
     client('test_service', 'test_1234', {
@@ -76,6 +103,20 @@ describe('Client', function() {
       assert.ifError(err);
 
       assert.equal(response.test, 1234*2);
+      done();
+
+    });
+
+  });
+
+  it('should not be able to query a service not matching a filter', function(done) {
+
+    client({
+      service: "test_service",
+      filter: "mem_total < 1"
+    }, "test_1234", {}, function(err, response) {
+
+      assert.equal(err.message, "no services found");
       done();
 
     });

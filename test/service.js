@@ -108,8 +108,9 @@ describe("Service", function() {
 
       assert.equal(typeof info.mem_free, 'number');
       assert.equal(info.mem_total, os.totalmem());
-      assert.equal(info.cpus[0], os.cpus()[0].speed);
-      assert(info.loadavg[1] > 0);
+      assert.equal(info.cpus_0, os.cpus()[0].speed);
+      assert.equal(info.cpus_num, os.cpus().length);
+      assert(info.loadavg_1 > 0);
       assert(os.uptime() > info.uptime);
 
       done();
