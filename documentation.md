@@ -50,7 +50,7 @@ This function is basically an event handler for the `name` event. When this serv
 The following adds an event handler for `example_event` 
 ```
 service.on('example_event', {}, function(data, callback) {
-    callback("hello world");
+    callback(null, "hello world");
 });
 ```
 
@@ -111,7 +111,7 @@ var Service = require('railgun-js').service;
 var service = new Service('example_service');
 
 service.on('example_event', {}, function(body, callback) {
-  callback("hello world");2
+  callback(null, "hello world");2
 });
 
 service.ready();

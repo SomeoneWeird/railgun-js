@@ -46,7 +46,7 @@ describe("Service", function() {
 
       var _d = data.hello.toUpperCase();
 
-      callback({
+      callback(null, {
         result: _d
       });
 
@@ -102,7 +102,7 @@ describe("Service", function() {
       service.on('nothingtoseehere', {
         hello: Joi.number().integer()
       }, function(body, callback) {
-        return callback(body);
+        return callback(null, body);
       });
 
       _request.post('/railgun_test/api/nothingtoseehere')

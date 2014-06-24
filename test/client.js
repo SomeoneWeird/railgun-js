@@ -21,7 +21,11 @@ describe('Client', function() {
       test: Joi.number()
     }, function(body, callback) {
       body.test *= 2;
-      callback(body);
+      callback(null, body);
+    });
+
+    _service.on('shouldError', {}, function(body, callback) {
+      callback("woops");
     });
 
     _service.ready(done);
@@ -72,6 +76,19 @@ describe('Client', function() {
       assert.ifError(err);
 
       assert.equal(response.test, 1234*2);
+      done();
+
+    });
+
+  });
+
+  it('should catch errors', function(done) {
+
+    client('test_service', 'shouldError', {}, function(err, response) {
+
+      assert.equal(err, 'woops');
+      assert.equal(response, undefined);
+
       done();
 
     });
