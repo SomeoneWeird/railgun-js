@@ -1,4 +1,5 @@
 var assert  = require('assert');
+var os      = require('os');
 var request = require('supertest');
 var Etcd    = require('node-etcd');
 var Joi     = require('joi');
@@ -18,6 +19,7 @@ before(function(done) {
 describe("Service", function() {
 
   var service;
+  var serviceKey;
   var _request;
 
   it("should create a service", function(done) {
@@ -31,6 +33,9 @@ describe("Service", function() {
     // reassign _request object
     // to current service spec
     _request = request('http://0.0.0.0:8000');
+
+    // set etcd key for tests
+    serviceKey = '/services/railgun_test/' + service.id;
 
     assert(!!service, "service is undefined.");
 
@@ -76,16 +81,37 @@ describe("Service", function() {
   
   });
 
+  var getEtcdEntry = function(key, cb) {
+    etcd.get(key, {}, function(err, body) {
+      assert.ifError(err);
+      return cb(JSON.parse(body.node.value));
+    });
+  }
+
   it("should have registered w/ etcd", function(done) {
 
-    etcd.get('/services/railgun_test/' + service.id, {}, function(err, body) {
-
-      assert.ifError(err);
-
-      var data = JSON.parse(body.node.value);
+    getEtcdEntry(serviceKey, function(data) {
 
       assert.equal(data.host, '127.0.0.1');
       assert.equal(data.port, 8000);
+      done();
+
+    });
+
+  });
+
+  it("should have registered host stats", function(done) {
+
+    getEtcdEntry(serviceKey, function(data) {
+
+      var info = data.host_info;
+
+      assert.equal(typeof info.mem_free, 'number');
+      assert.equal(info.mem_total, os.totalmem());
+      assert.equal(info.cpus[0], os.cpus()[0].speed);
+      assert(info.loadavg[1] > 0);
+      assert(os.uptime() > info.uptime);
+
       done();
 
     });
