@@ -1,6 +1,6 @@
 {
   "name": "railgun-js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Stupidly simple microservice architecture framework",
   "scripts": {
     "test": "mocha -R spec"
@@ -17,6 +17,7 @@
     "slug": "^0.5.0",
     "joi": "^4.6.1",
     "superagent": "^0.18.0",
-    "filtrex": "^0.5.4"
+    "filtrex": "^0.5.4",
+    "portscanner": "^1.0.0"
   }
 }

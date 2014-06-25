@@ -27,7 +27,8 @@ describe("Service", function() {
     service = new Service('railgun_test', {
       // set a timeout of 1 second for etcd
       // make tests much quick. wow.
-      timeout: 1000
+      timeout: 1000,
+      port:    8000
     }, noop);
 
     // reassign _request object
@@ -40,6 +41,28 @@ describe("Service", function() {
     assert(!!service, "service is undefined.");
 
     done();
+
+  });
+
+  it("should create a new service and automatically find a port", function(done) {
+
+    var _service = new Service('port_test', {
+      timeout: 50
+    }, noop);
+
+    _service.ready(function(err) {
+
+      assert.ifError(err);
+
+      assert.equal(typeof _service.config.port, 'number');
+      assert(_service.config.port > 1024);
+
+      setTimeout(function() {
+        // wait for entry to expire from etcd
+        done();
+      }, 100)
+
+    });
 
   });
 
@@ -165,6 +188,7 @@ describe("Service", function() {
 
         etcd.get('/services/railgun_test/' + service.id, {}, function(err, body) {
 
+          assert(err);
           assert(err.error.errorCode, 100);
           done();
 

@@ -16,6 +16,8 @@ var config = {
   // Host IP of the etcd instance this service is going to talk to.
   etcd_host: '127.0.0.1',
   // Host port that the service will listen on.
+  // This is optional, if falsy, railgun will attempt to find
+  // the next open port, and listen on that instead.
   port: 8000,
   // Host port of the etcd instance this service is going to talk to.
   etcd_port: 4001,
