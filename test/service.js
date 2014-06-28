@@ -134,7 +134,7 @@ describe("Service", function() {
       assert.equal(info.cpus_0, os.cpus()[0].speed);
       assert.equal(info.cpus_num, os.cpus().length);
       assert(info.loadavg_1 > 0);
-      assert(os.uptime() > info.uptime);
+      assert(os.uptime() >= info.uptime);
 
       done();
 
