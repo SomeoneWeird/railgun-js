@@ -31,7 +31,9 @@ This is as much for me as for everyone else:
 - ~~Job weighting / bidding system - allow client to filter out unsuitable hosts using a range of metrics (service version, host cpu free, host ram free etc.)~~
 - ~~automatically find available ports for services if not specified (client pulls port from etcd anyway)~~
 - Metrics tracking
-- Healthchecks
+- ~~Healthchecks~~
+- Add support to add checks over API
+- Make healthchecks log current health in etcd entry
 
 API Documentation
 ------------
